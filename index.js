@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require( 'body-parser')
-const db = require ('monk')('mongodb:admin:password1@ds255539.mlab.com:55539/plants')
+const db = require('monk')('mongodb://admin2:password1@ds255539.mlab.com:55539/plants')
 const app = express()
 const port = process.env.PORT || 4001
 const plantscollection = db.get('plants')
@@ -16,14 +16,22 @@ app.use((req, resp, next) => {
 
 app.get('/', async (req, resp) => {
     console.log('test')
-    // const plants = await plantscollection.find()
-    resp.send('test')
+    const plants = await plantscollection.find() 
+    resp.send(plants)
 });
 
 app.post('/', async (req, resp) => {
-    plantscollection.insert(req.body)
-    const plants = await plantscollection.find()
-    resp.send(plants)
+    console.log(req.params.id)
+    try {  
+        const body =  req.body
+        await plantscollection.insert(body) 
+        const plants = await plantscollection.find()
+        resp.send(plants)
+    }
+    catch(err){ 
+console.log(err) 
+    }
+     
 });
 
 app.put('/', (req, resp) => resp.send('PUTing stuff'))
