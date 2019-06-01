@@ -15,7 +15,6 @@ app.use((req, resp, next) => {
 })
 
 app.get('/', async (req, resp) => {
-    console.log('test')
     const plants = await plantscollection.find() 
     resp.send(plants)
 });
@@ -25,7 +24,7 @@ app.post('/', async (req, resp) => {
     try {  
         const body =  req.body
         await plantscollection.insert(body) 
-        const plants = await plantscollection.find()
+        const plants = await plantscollection.insert()
         resp.send(plants)
     }
     catch(err){ 
